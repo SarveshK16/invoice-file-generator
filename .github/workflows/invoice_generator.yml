@@ -1,0 +1,39 @@
+name: Monthly Invoice Generator
+
+on:
+  schedule:
+    - cron: "30 4 26 * *"  # Runs at 10:00 AM IST on the 26th of every month
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt  
+
+      - name: Run Script
+        run: python generate_invoice.py
+
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Monthly Internet Invoice"
+          body: "Find the attached invoice for this month."
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
+          attachments: invoice_MonthName_Year.docx
