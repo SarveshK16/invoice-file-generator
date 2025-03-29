@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check if user is authorized (for manual runs)
+        if: github.event_name == 'workflow_dispatch' && github.actor != 'SarveshK16'
+        run: |
+          echo "You are not authorized to run this workflow."
+          exit 1  # Stop execution if unauthorized user runs it
+          
       - name: Checkout Repository
         uses: actions/checkout@v3
 
