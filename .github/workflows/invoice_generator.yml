@@ -36,4 +36,4 @@ jobs:
           body: "Find the attached invoice for this month."
           to: ${{ secrets.EMAIL_TO }}
           from: ${{ secrets.EMAIL_FROM }}
-          attachments: invoice_MonthName_Year.docx
+          attachments: invoice_*.docx
